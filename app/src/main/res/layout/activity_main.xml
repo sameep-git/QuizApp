@@ -77,7 +77,8 @@
                 android:layout_height="match_parent"
                 android:text="@string/start"
                 app:cornerRadius="0sp"
-                android:backgroundTint="#4D1979"/>
+                android:backgroundTint="#4D1979"
+                android:textSize="16sp"/>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
