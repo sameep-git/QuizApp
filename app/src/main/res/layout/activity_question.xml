@@ -15,15 +15,18 @@
         android:layout_gravity="center_horizontal">
 
         <TextView
+            android:id="@+id/question_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="What country does this flag belong to?"
             android:textSize="20sp"
             android:layout_gravity="center_horizontal"
+            android:textColor="@color/black"
             android:layout_marginBottom="20dp"/>
         <!--            use tools to use placeholder text!-->
 
         <ImageView
+            android:id="@+id/flag_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/a_flag"
@@ -41,6 +44,7 @@
 
             <ProgressBar
                 style="?android:attr/progressBarStyleHorizontal"
+                android:id="@+id/progress_bar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
@@ -48,6 +52,7 @@
                 tools:progress="3"
                 android:layout_gravity="center_vertical"/>
             <TextView
+                android:id="@+id/progress_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -57,25 +62,27 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="0dp"/>
 
-
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/option_ll"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="center_horizontal">
 
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
-            android:layout_width="match_parent"
+            android:id="@+id/submit_btn"
+            android:layout_marginTop="20dp"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
             android:text="@string/submit"
             app:cornerRadius="0sp"
             android:backgroundTint="#4D1979"
             android:textSize="16sp"
             android:layout_gravity="center_horizontal"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 
