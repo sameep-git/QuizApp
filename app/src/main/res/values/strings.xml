@@ -12,4 +12,6 @@
     <string name="good_result_message">Congratulations</string>
     <string name="result_score">Your score is 10 out of 10.</string>
     <string name="try_again_btn">Try again</string>
+    <string name="finish_quiz">Finish Quiz</string>
+    <string name="go_to_next_question">Go to next question</string>
 </resources>

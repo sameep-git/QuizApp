@@ -24,6 +24,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     private val optionTvs = mutableListOf<TextView>()
     private var answerRevealed = false
     private var selectedOptionIdx = -1
+    private var incorrect = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,22 +42,28 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setQuestion() {
         selectedOptionIdx = -1
+        answerRevealed = false
         val question = questions[questionIdx]
         findViewById<TextView>(R.id.question_tv).text = question.question
         // Needs work on image setter
         // Set up the progress bar
         findViewById<ProgressBar>(R.id.progress_bar).progress = questionIdx + 1
-        findViewById<TextView>(R.id.progress_tv).setText("${questionIdx+1}/10")
+        findViewById<TextView>(R.id.progress_tv).text = buildString {
+            append(questionIdx+1)
+            append("/10")
+        }
         findViewById<ImageView>(R.id.flag_iv).setImageResource(question.image)
         setOptionTvs(question)
-        findViewById<Button>(R.id.submit_btn).text = R.string.submit.toString()
+        findViewById<Button>(R.id.submit_btn).setText(R.string.submit)
         // Change submit button text
     }
 
     private fun setOptionTvs(question: Question){
         // Remove all the options from the previous question from the LinearLayout
-        // Clear all the options from optionTvs
+        // Clear all the options from optionTvs DONE :)
+        optionTvs.clear()
         val optionLl = findViewById<LinearLayout>(R.id.option_ll)
+        optionLl.removeAllViews()
         val layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -78,12 +85,23 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun selectedOptionView(selectedOptionTv: TextView) {
-        // Set all options to default look
-        // Set selected button to selected look
+        // Set all options to default look DONE
+        // Set selected button to selected look DONE
+        for (optionTv in optionTvs) {
+            if (selectedOptionTv == optionTv) optionTv.setBackgroundResource(R.drawable.selected_option_bg)
+            else optionTv.setBackgroundResource(R.drawable.default_option_bg)
+        }
     }
 
     private fun answerView(correctOptionTv: TextView) {
-
+        answerRevealed = true
+        for (i in optionTvs.indices) {
+            if (optionTvs[i] == correctOptionTv) optionTvs[i].setBackgroundResource(R.drawable.correct_option_bg)
+            if (optionTvs[selectedOptionIdx] != correctOptionTv){
+                optionTvs[selectedOptionIdx].setBackgroundResource(R.drawable.wrong_option_bg)
+                incorrect++
+            }
+        }
     }
 
     private fun goToResult() {
@@ -95,17 +113,24 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             if (!answerRevealed) {
                 if (selectedOptionIdx == -1) {
                     Toast.makeText(this, "Select an option!", Toast.LENGTH_SHORT).show()
+                } else {
+                    for (optionTv in optionTvs) {
+                        if (optionTv.text == questions[questionIdx].correctAnswer) answerView(optionTv)
+                    }
+                    if (questionIdx == questions.size-1) findViewById<Button>(R.id.submit_btn).text = getString(R.string.finish_quiz)
+                    else findViewById<Button>(R.id.submit_btn).text = getString(R.string.go_to_next_question)
                 }
             } else {
                 questionIdx++
-                setQuestion() // Back to phase 1
-                // Or goToResult()
+                if (questionIdx == questions.size) goToResult()
+                else setQuestion() // Back to phase 1
             }
         } else { // If an option is clicked
             // Call answer_view
-            for (optionTv in optionTvs) {
-                if (view == optionTv) {
-                    selectedOptionView(optionTv)
+            for (i in optionTvs.indices) {
+                if (view == optionTvs[i]) {
+                    selectedOptionView(optionTvs[i])
+                    selectedOptionIdx = i
                 }
             }
         }
