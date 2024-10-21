@@ -25,12 +25,11 @@ class ResultActivity : AppCompatActivity() {
         val maxCorrect = bundle.getInt("max_correct")
         val username = bundle.getString("username")
 
-        if (correct > 5) {
+        if ((correct/ maxCorrect.toFloat()) > 0.5) {
             findViewById<ImageView>(R.id.result_iv).setImageResource(R.drawable.ic_trophy)
             findViewById<TextView>(R.id.result_message_tv).text =
                 getString(R.string.congratulations, username)
-        }
-        else {
+        } else {
             findViewById<ImageView>(R.id.result_iv).setImageResource(R.drawable.ic_sweat_face)
             findViewById<TextView>(R.id.result_message_tv).text =
                 getString(R.string.good_luck_next_time, username)

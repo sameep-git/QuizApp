@@ -112,6 +112,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val intent = Intent(this, ResultActivity::class.java)
         intent.putExtra("correct", correct)
         intent.putExtra("max_correct", questions.size)
+        println(questions.size)
         intent.putExtra("username", username)
         startActivity(intent)
         finish()
