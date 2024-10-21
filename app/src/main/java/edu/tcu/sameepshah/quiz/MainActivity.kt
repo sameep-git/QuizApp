@@ -3,6 +3,7 @@ package edu.tcu.sameepshah.quiz
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -20,20 +21,27 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         val nameEt = findViewById<TextInputEditText>(R.id.name_et)
+        val startBtn = findViewById<Button>(R.id.start_btn)
+        startBtn.setOnClickListener { _ ->
+            if((nameEt.text?.isNotBlank() == true)) {
+                goToQuestion(nameEt)
+            } else {
+                Toast.makeText(this, "Please enter your name!", Toast.LENGTH_SHORT).show()
+            }
+        }
         nameEt.setOnEditorActionListener { _, actionId, _ ->
-            if(actionId == EditorInfo.IME_ACTION_GO) {
-                Toast.makeText(this, nameEt.text.toString(), Toast.LENGTH_SHORT).show()
+            if((actionId == EditorInfo.IME_ACTION_GO) && (nameEt.text?.isNotBlank() == true)) {
                 goToQuestion(nameEt)
                 true
-            } else false
+            } else {
+                Toast.makeText(this, "Please enter your name!", Toast.LENGTH_SHORT).show()
+                false
+            }
         }
     }
 
     private fun goToQuestion(nameEt: TextInputEditText) {
-        Toast.makeText(this, "Enter a name!", Toast.LENGTH_SHORT).show()
-
         val intent = Intent(this, QuestionActivity::class.java)
         intent.putExtra("username", nameEt.text.toString())
         startActivity(intent)

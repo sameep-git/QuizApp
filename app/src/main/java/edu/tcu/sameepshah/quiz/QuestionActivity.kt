@@ -1,5 +1,6 @@
 package edu.tcu.sameepshah.quiz
 
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
@@ -19,12 +20,13 @@ import androidx.core.view.WindowInsetsCompat
 
 class QuestionActivity : AppCompatActivity(), View.OnClickListener {
 
+    private var username: String = ""
     private val questions = Constants.getQuestions().shuffled()
     private var questionIdx = 0
     private val optionTvs = mutableListOf<TextView>()
     private var answerRevealed = false
     private var selectedOptionIdx = -1
-    private var incorrect = 0
+    private var correct = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +39,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         }
         findViewById<ProgressBar>(R.id.progress_bar).max = questions.size
         findViewById<Button>(R.id.submit_btn).setOnClickListener(this)
+        username = intent.getStringExtra("username").toString()
         setQuestion()
     }
 
@@ -99,13 +102,19 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             if (optionTvs[i] == correctOptionTv) optionTvs[i].setBackgroundResource(R.drawable.correct_option_bg)
             if (optionTvs[selectedOptionIdx] != correctOptionTv){
                 optionTvs[selectedOptionIdx].setBackgroundResource(R.drawable.wrong_option_bg)
-                incorrect++
             }
         }
+        if (optionTvs[selectedOptionIdx] == correctOptionTv) correct++
     }
 
     private fun goToResult() {
         // Use intent to go to result page
+        val intent = Intent(this, ResultActivity::class.java)
+        intent.putExtra("correct", correct)
+        intent.putExtra("max_correct", questions.size)
+        intent.putExtra("username", username)
+        startActivity(intent)
+        finish()
     }
 
     override fun onClick(view: View?) {
@@ -127,10 +136,12 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             }
         } else { // If an option is clicked
             // Call answer_view
-            for (i in optionTvs.indices) {
-                if (view == optionTvs[i]) {
-                    selectedOptionView(optionTvs[i])
-                    selectedOptionIdx = i
+            if (!answerRevealed) {
+                for (i in optionTvs.indices) {
+                    if (view == optionTvs[i]) {
+                        selectedOptionView(optionTvs[i])
+                        selectedOptionIdx = i
+                    }
                 }
             }
         }
